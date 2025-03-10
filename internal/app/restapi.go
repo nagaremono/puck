@@ -1,18 +1,22 @@
 package restapi
 
 import (
-	"log"
 	"os"
 	"os/signal"
 	"syscall"
 
+	"github.com/nagaremono/puck/internal/config"
 	"github.com/nagaremono/puck/internal/controller"
 	"github.com/nagaremono/puck/pkg/httpserver"
+	"github.com/nagaremono/puck/pkg/logger"
+	"github.com/rs/zerolog"
 )
 
 func Run() {
+	cfg := config.NewConfig()
+	logger := logger.New(zerolog.Level(cfg.Log.Level()))
 	handler := controller.NewRouter()
-	s := httpserver.New(handler)
+	s := httpserver.New(handler, httpserver.Port(cfg.Server.Port()))
 
 	s.Start()
 
@@ -21,9 +25,9 @@ func Run() {
 
 	select {
 	case <-quit:
-		log.Println("Shutting down server")
+		logger.Info().Msg("Shutting down server")
 	case err := <-s.Notify():
-		log.Fatalf("listen: %s\n", err)
+		logger.Error().Err(err).Msg("listen: %s\n")
 	}
 
 	s.Shutdown()

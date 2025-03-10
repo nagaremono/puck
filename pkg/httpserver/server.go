@@ -16,7 +16,7 @@ type Server struct {
 	notify chan error
 }
 
-func New(handler http.Handler) *Server {
+func New(handler http.Handler, opts ...ServerOption) *Server {
 	s := http.Server{
 		Handler: handler,
 		Addr:    _defaultAddress,
@@ -25,6 +25,10 @@ func New(handler http.Handler) *Server {
 	server := Server{
 		server: &s,
 		notify: make(chan error, 1),
+	}
+
+	for _, o := range opts {
+		o(&server)
 	}
 
 	return &server
