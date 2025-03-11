@@ -25,7 +25,7 @@ func Run() {
 
 	select {
 	case <-quit:
-		logger.Info().Msg("Shutting down server")
+		logger.Info().Msg("Quit signal")
 	case err := <-s.Notify():
 		logger.Error().Err(err).Msg("listen: %s\n")
 	}

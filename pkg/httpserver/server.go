@@ -50,6 +50,6 @@ func (s *Server) Shutdown() {
 	defer cancel()
 
 	if err := s.server.Shutdown(ctx); err != nil {
-		log.Fatal("Server forced shutdown: ", err)
+		log.Fatal("Server shutdown %w", err)
 	}
 }
