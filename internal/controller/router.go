@@ -11,7 +11,7 @@ func NewRouter() http.Handler {
 
 	r.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("service is healtyyyy"))
-	})
+	}).Methods("GET")
 
 	return r
 }
