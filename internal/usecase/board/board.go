@@ -5,6 +5,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/nagaremono/puck/internal/domain"
+	"github.com/nagaremono/puck/internal/persistence"
 	"github.com/nagaremono/puck/pkg/logger"
 )
 
@@ -20,7 +21,8 @@ type CreateBoardParams struct {
 func Name(name string)
 
 type Board struct {
-	Logger *logger.Logger
+	Logger     *logger.Logger
+	repository persistence.BoardRepository
 }
 
 func (b *Board) CreateBoard(params CreateBoardParams) error {
@@ -35,6 +37,8 @@ func (b *Board) CreateBoard(params CreateBoardParams) error {
 	if err != nil {
 		return err
 	}
+
+	err = b.repository.Create(board)
 
 	return nil
 }
